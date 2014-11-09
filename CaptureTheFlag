@@ -1,0 +1,76 @@
+package CTF;
+
+import zen.core.Zen;
+
+public class CaptureTheFlag {
+
+	public static void main(String[] args) {
+		Zen.connect("capture the flag");
+
+		Zen.write("rohanx", 750);
+		Zen.write("rohany", 250);
+		Zen.write("rohanteam", "blue");
+
+
+		Zen.create(1000, 500);
+		
+		Player me = new Player("rohan");
+		
+		Game g = new Game();
+		Team redTeam = new Team("red");
+		redTeam.addPlayer(new Player("keshav"));
+		redTeam.addPlayer(new Player("divya"));
+		redTeam.addPlayer(new Player("ruchi"));
+		redTeam.addPlayer(new Player("alejandro"));
+		redTeam.addPlayer(new Player("nathan"));
+		redTeam.addPlayer(new Player("aakash"));
+		g.addTeam(redTeam);
+		
+		Team blueTeam = new Team("blue");
+		redTeam.addPlayer(new Player("nicolas"));
+		redTeam.addPlayer(new Player("anoop"));
+		redTeam.addPlayer(new Player("amogh"));
+		redTeam.addPlayer(new Player("rishi"));
+		redTeam.addPlayer(me);
+		g.addTeam(blueTeam);
+
+		
+
+		while (true) {
+			Zen.setBackground("green");
+			Zen.setColor("white");
+			Zen.drawLine(500, 0, 500, 500);
+
+			if (Zen.isKeyPressed("left") && getX() > 0) {
+				Zen.write("rohanx", getX() - 10);
+			}
+			if (Zen.isKeyPressed("right") && getX() < 1000) {
+				Zen.write("rohanx", getX() + 10);
+			}
+			if (Zen.isKeyPressed("up") && getY() > 0) {
+				Zen.write("rohany", getY() - 10);
+			}
+			if (Zen.isKeyPressed("down") && getY() < 500) {
+				Zen.write("rohany", getY() + 10);
+			}
+			
+			//If I'm not on my safe side and someone from the blue team
+			//is touching me, then I need to go back to my original place.
+			if (getX() < 500 && redTeam.isTouching(me)) {
+				Zen.write("rohanx", 750);
+				Zen.write("rohany", 250);
+			}
+
+			g.draw();
+			g.move();
+			Zen.buffer(33);
+		}
+	}
+	private static int getY() {
+		return Zen.readInt("rohany");
+	}
+
+	private static int getX() {
+		return Zen.readInt("rohanx");
+	}		
+}
